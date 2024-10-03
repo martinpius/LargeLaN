@@ -3,7 +3,7 @@ from torch import nn
 from transformer_block import Transformer
 from g_data import embed_size, block_size, n_layers, device, vocab_size, head_size, get_batch,decode
 
-class NanoGPT(nn.Module):
+class LM_Core(nn.Module):
     '''
     We use our transomer block to construct a nano-GPT model
     i.e., we stack 6 transformer's block , we also use layer
@@ -63,8 +63,8 @@ class NanoGPT(nn.Module):
 
 if __name__ == "__main__":
     xb, yb = get_batch("train")
-    nano_gpt = NanoGPT().to(device = device)
-    logits, loss = nano_gpt(xb, yb)
+    lm_core = LM_Core().to(device = device)
+    logits, loss = lm_core(xb, yb)
     print(f">>>> Loss: {loss.item():.4f}, Logits shape: {logits.shape}")
     text_codes = nano_gpt.generator(torch.zeros(size = (1,1), dtype = torch.long, device = device), 1000)[0].tolist()
     print(f">>>> Random generated texts is:\n\n {decode(text_codes)}")
